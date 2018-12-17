@@ -1,0 +1,18 @@
+{
+  "name": "ANTPOOL",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "node antpool.js"
+  },
+  "dependencies": {
+    "coinbase": "^2.0.8",
+    "telegraf": "^3.25.5",
+    "mysql": "^2.16.0",
+    "random-item": "^1.0.0",
+    "node-cron": "^2.0.3",
+    "random-number": "^0.0.9",
+    "bitcoin-exchange-rates": "^0.0.12",
+    "wallet-address-validator": "^0.2.4",
+    "random-decimal": "^1.0.2"
+  }
+}
