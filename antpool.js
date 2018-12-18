@@ -178,21 +178,23 @@ bot.hears('🏠Menu',ctx => {
         .keyboard([
             ['🔮Account'],
           ['➕Deposit','🎉Shop','🏦Withdraw'],
-            ['👤Refferal','🎁Bonus','☎️Suppoort']
+            ['👤Refferal','🎁Bonus','☎️Support']
         ])
 
         .resize()
         .extra())
 
-        .then(()=>{
-    ctx.replyWithHTML('<b>🔻Recent transactions 👇🏻</b>',Extra
-        .HTML()
-        .markup((m) => m.inlineKeyboard([
-            m.urlButton('🔻Recent transactions', 'https://t.me/GrandMiningBtcTransactions')
+        .then(()=> {
+            ctx.replyWithHTML('🎉BIG BONUS🎉\n\n📌 Available to <b>2018/12/30</b>\n' + '📌 1 year contract on <b>all machines</b>\n' + '📌 Automatic payout in <b>BTC</b>\n\n🏵0.001 - 0.01 ฿ ⏩ ➕ <b>%10 Bonus</b>\n\n🏵0.01 - 0.1 ฿ ⏩ ➕  <b>%15 Bonus</b>\n\n🏵0.1 - 0.2 ฿ ⏩ ➕  <b>%20 Bonus</b>\n\n🏵0.2 - 0.5 ฿ ⏩ ➕  <b>%30 Bonus</b>\n\n🏵0.5 - 1 ฿ ⏩ ➕  <b>%50 Bonus</b>\n\n🏵1 ฿ > ⏩ ➕  <b>%70 Bonus</b>')
+                .then(() => {
+                    ctx.replyWithHTML('<b>🔻Recent transactions 👇🏻</b>', Extra
+                        .HTML()
+                        .markup((m) => m.inlineKeyboard([
+                            m.urlButton('🔻Recent transactions', 'https://t.me/GrandMiningBtcTransactions')
 
-        ], { columns: 1 })))
+                        ], {columns: 1})))
+                })
         })
-
 })
 //////account
 bot.hears('🔮Account',ctx => {
@@ -221,7 +223,7 @@ bot.hears('🔮Account',ctx => {
                             .resize()
                             .extra())
                             .then(() => {
-                                ctx.replyWithHTML('<b>your withdraw wallet:</b> ' + results[0].withdrawadd, Extra
+                                ctx.replyWithHTML('<b>your withdraw wallet:</b> <i>' + results[0].withdrawadd+'</i>', Extra
                                     .HTML()
                                     .markup((m) => m.inlineKeyboard([
                                         m.callbackButton('🖋Set withdraw wallet', '🖋Set withdraw wallet')
@@ -254,13 +256,15 @@ bot.hears('🔮Account',ctx => {
                             var sqli = "update `account` set `txid` = '" + txid + "', balance = `balance`+" + balance + ", transactions = `transactions`+" + transactions + " where `id` = '" + chatid + "'";
                             con.query(sqli, function (err, response) {
                                 console.log(err)
+                                var trans='https://live.blockcypher.com/btc/address/'+res[0].depoaddre
                                 var ref = res[0].ref
                                 var refbonus = balance * 0.30
                                 var sqla = "update `account` set `balance` = `balance`+" + refbonus + " where `id` = '" + ref + "'";
                                 con.query(sqla)
                                 ctx.telegram.sendMessage(res[0].id, 'we have received your deposit of ' + balance + '  BTC️ ')
                                 ctx.telegram.sendMessage(ref, 'you refferal just deposited. ' + refbonus.toFixed(8) + 'BTC has been added to your  balance ')
-                                ctx.telegram.sendMessage('@GrandMiningBtcTransactions', 'new deposit of ' + transactions + ' BTC by ' + ctx.from.first_name + '\n\nhttps://live.blockcypher.com/btc/address/' + res[0].depoaddre)
+                                ctx.telegram.sendMessage('@GrandMiningBtcTransactions', '<b>💰 Deposit</b>  \n<b>🔹 Investor:</b> ' + ctx.from.first_name + '\n<b>💵Amount:</b>'+balance+'\n<a href="'+trans+'">view transaction</a>',Extra
+                                    .HTML())
                             })
                         }
                     })
@@ -498,8 +502,8 @@ bot.hears('🎉Shop',ctx => {
 
                                     }).then(() => {
                                     //jewellar
-                                    ctx.replyWithPhoto({url: 'https://cdn.glitch.com/a8ee10b2-ecac-4079-8fec-9df07981d2b2%2Fstock-photo-cryptocurrency-mining-farm-bitcoin-and-altcoins-mining-asic-miner-d-rendering-774975592.jpg?1545077197455'})
-                                        .then(() => {
+                                    ctx.replyWithPhoto({url: 'https://cdn.glitch.com/a8ee10b2-ecac-4079-8fec-9df07981d2b2%2Fdownload%20(2).jpg?1545118600637'})
+                                        .then(()=>{
                                             ctx.replyWithHTML('<b>Antminer S9i</b>\n\n<i>price: 0.25 ฿ </i>\n<i>income:  0.0005 ฿ per hour</i>', Extra
                                                 .HTML()
                                                 .markup((m) => m.inlineKeyboard([
@@ -732,6 +736,413 @@ bot.hears('🎊stats',ctx => {
         })
     })
 })
+//////////////////////////my machines
+bot.hears('🖥My Machines',ctx => {
+    var user=ctx.from.id
+    var sql = "SELECT ant1,ant2,ant3,ant4,ant5,ant6,ant7 from `account` where `id` = '" + user + "'";
+    con.query(sql, function(error, results, fields) {
+        ctx.replyWithHTML('<b>🖥My Machines</b>\n\n<b>🖥Antiminer s7:</b>' + results[0].ant1 + '\n\n<b>🖥Avalon6:</b>' + results[0].ant2 + '\n\n<b>🖥Antminer R4:</b>' + results[0].ant3 + '\n\n<b>🖥Whatsminer M3X:</b>' + results[0].ant4 + '\n\n<b>🖥Antiminer T9:</b>' + results[0].ant5 + '\n\n<b>🖥DragonMint T1:</b>' + results[0].ant6 + '\n\n<b>🖥Antminer S9i:</b>' + results[0].ant7, Markup
+            .keyboard([
+                ['🎉Shop'],
+                ['🏠Menu']
+            ])
+
+            .resize()
+            .extra())
+
+
+    })
+
+})
+///withdraw
+bot.hears('🏦Withdraw',ctx => {
+    ctx.replyWithHTML('<b>🏦Withdraw</b>',Markup
+        .keyboard([
+            ['💵Order payment','📃Payment history'],
+            ['🏠Menu']
+        ])
+
+        .resize()
+        .extra())
+
+
+
+
+
+
+})
+///payment history
+bot.hears('📃Payment history',ctx => {
+    var user=ctx.from.id
+    var sql = "SELECT amount,time from `payouts` where `id` = '" + user + "'";
+    con.query(sql, function(error, results, fields) {
+        if (results.length === 0) {
+            ctx.replyWithHTML('😔<i>no payment history found under your account</i>')
+
+
+        } else {
+            results.forEach(function (res) {
+                ctx.replyWithHTML('<b>💵amount withdrawn:</b>'+res.amount+' BTC\n<b>date withdrawn:</b>'+res.time)
+
+            })
+
+
+        }
+
+
+    })
+})
+
+
+
+////set address
+const greeterScene = new Scene('greeter')
+greeterScene.enter((ctx) => ctx.reply('send your BTC wallet address to be used for withdrwals below to update it',Markup
+    .keyboard([
+        ['🛑cancel'] // Row1 with 2 buttons
+    ])
+
+    .resize()
+    .extra())
+
+
+
+)
+greeterScene.hears('🛑cancel',ctx => {
+    ctx.reply('Main menu', Markup
+        .keyboard([
+            ['🔮Account'],
+            ['➕Deposit','🎉Shop','🏦Withdraw'],
+            ['👤Refferal','🎁Bonus','☎️Support']
+        ])
+
+        .resize()
+        .extra())
+    ctx.scene.leave()
+
+
+
+})
+greeterScene.on('message', (ctx) => {
+    var valid = WAValidator.validate(ctx.message.text, 'BTC');
+    if (valid) {
+        var ide = ctx.from.id
+        var sqli = "update `account` set `withdrawadd` = '" + ctx.message.text + "' where `id` = '" + ide + "'";
+        con.query(sqli)
+        ctx.replyWithHTML('<b>withdraw address updated</b>', Markup
+            .keyboard([
+                ['🔮Account'],
+                ['➕Deposit','🎉Shop','🏦Withdraw'],
+                ['👤Refferal','🎁Bonus','☎️Support']
+            ])
+
+            .resize()
+            .extra())
+        ctx.scene.leave()
+
+    } else {
+        ctx.reply('invalid BTC address', Markup
+            .keyboard([
+                ['🛑cancel']
+            ])
+
+            .resize()
+            .extra())
+
+    }
+})
+///withdraw scene
+const withdrawscene = new Scene('withdraw')
+withdrawscene.enter((ctx) => {
+    var id = ctx.from.id
+    var sql = "SELECT withdrawadd,balance from `account` where `id` = '" + id + "'";
+    con.query(sql, function (error, results, fields) {
+        if (results[0].withdrawadd == "none") {
+            ctx.replyWithHTML('<b>withdraw address not set</b>')
+            ctx.scene.leave()
+        } else {
+
+            rates = require('bitcoin-exchange-rates');
+
+            btcAmount = results[0].balance;
+
+            currency = 'USD';
+            rates.fromBTC(btcAmount, currency, function (err, rate) {
+                ctx.replyWithHTML('<b>🏵Withdraw funds</b>\n\n ▪️Min withdraw:<b>0.0005 BTC</b>\n▪️Your BTC:<b>'+results[0].balance+ '</b> <i>('+rate+' usd)</i>'+'\nWithdraw wallet:<b>'+results[0].withdrawadd+'</b>')
+                    .then(() => {
+                        ctx.replyWithHTML('<i>Enter the number of BTC you would like to withdraw to your BitCoin Wallet (a minimum of 0.0005 BTC)</i>', Markup
+                            .keyboard([
+                                ['🛑cancel'], // Row1 with 2 buttons
+                            ])
+
+                            .resize()
+                            .extra())
+
+                    })
+            })
+        }
+    })
+})
+withdrawscene.leave((ctx) =>  ctx.reply('Main menu', Markup
+    .keyboard([
+        ['🔮Account'],
+        ['➕Deposit','🎉Shop','🏦Withdraw'],
+        ['👤Refferal','🎁Bonus','☎️Support']
+    ])
+
+    .resize()
+    .extra())
+)
+withdrawscene.hears('🛑cancel',(ctx => ctx.scene.leave()))
+withdrawscene.on('message',ctx => {
+    var id = ctx.from.id
+    var sql = "SELECT balance from `account` where `id` = '" + id + "'";
+    con.query(sql, function (error, results, fields) {
+        if (isNaN(ctx.message.text)) {
+            ctx.reply('please enter a valid amount')
+
+        } else if (ctx.message.text < 0.0005) {
+            ctx.replyWithHTML('The minimum required for withdraw is <b>0.0005 BTC</b>')
+            ctx.scene.leave()
+        } else if (ctx.message.text > results[0].balance) {
+            ctx.reply('your balance is not enough for the requsted withdrawal')
+            ctx.scene.leave()
+        } else {
+            var id = ctx.from.id
+            var sql = "SELECT balance,withdrawadd from `account` where `id` = '" + id + "'";
+            con.query(sql, function (error, results, fields) {
+                var payout =ctx.message.text
+                var addre = results[0].withdrawadd
+                client.getAccount(btc, function (err, account) {
+                    account.sendMoney({
+                        'to': addre,
+                        'amount': payout,
+                        'currency': 'BTC'
+                    }, function (err, tx) {
+                        var trans='https://live.blockcypher.com/btc/address/'+results[0].withdrawadd
+                        ctx.telegram.sendMessage('@GrandMiningBtcTransactions', '<b>💰 Withdraw</b>  \n<b>🔹 Investor:</b> ' + ctx.from.first_name + '<b>💵Amount:</b>'+payout+'\n<a href="'+trans+'">view transaction</a>',Extra
+                            .HTML())
+                        var user = ctx.from.id
+                        var amount = ctx.message.text
+                        var sqla = "update `account` set `balance` =`balance`- '" + amount  + "', transactions =`transactions`+ " + payout + " where `id` = '" + user + "'";
+                        con.query(sqla)
+                        ctx.replyWithHTML('Your withdrawal of ' + payout + ' BTC is being processed', Markup
+                            .keyboard([
+                                ['🔮Account'],
+                                ['➕Deposit','🎉Shop','🏦Withdraw'],
+                                ['👤Refferal','🎁Bonus','☎️Support']
+                            ])
+
+                            .resize()
+                            .extra())
+
+                        /////payouts
+                        var useri = {
+                            id:ctx.from.id,
+                           amount:payout,
+                            time:new Date()
+                        };
+                        con.query("insert into `payouts` SET ?", useri)
+
+
+
+
+                        ctx.scene.leave()
+                    });
+                });
+
+
+            })
+        }
+    })
+})
+////ticket
+bot.hears('☎️Support',ctx => {
+    ctx.replyWithHTML('<b>☎️Suppoort</b>\n' + 'If you have a question or a problem with deposit or withdraw system, you can create a ticket\n' + '\n' + 'If your problem is about withdrawal and the bot has given you a transaction hash ID, your payment is already on its way and out of our control\n' + '\n' + ' If it is about deposit, please wait at least 24 hours to recieve confirmations on the blockchain before writing a ticket',Markup
+        .keyboard([
+            ['✏️Ticket'],
+            ['🏠Menu']
+        ])
+
+        .resize()
+        .extra())
+
+
+
+
+
+
+})
+//////////ticket scene
+const ticketScene = new Scene('ticket')
+ticketScene.enter((ctx) => ctx.replyWithHTML('<b>Ticket System</b>',Markup
+    .keyboard([
+        ['🛑cancel'] // Row1 with 2 buttons
+    ])
+
+    .resize()
+    .extra())
+    .then(()=>{
+        ctx.replyWithHTML('When you have any problems, send us a question. Our staff will check and answer all the questions you have.\n\n🔻 Enter your question:')
+
+
+
+    })
+
+
+)
+ticketScene.hears('🛑cancel',ctx => {
+    ctx.reply('Main menu', Markup
+        .keyboard([
+            ['🔮Account'],
+            ['➕Deposit','🎉Shop','🏦Withdraw'],
+            ['👤Refferal','🎁Bonus','☎️Support']
+        ])
+
+        .resize()
+        .extra())
+    ctx.scene.leave()
+
+
+
+})
+ticketScene.on('message',ctx => {
+    ctx.telegram.sendMessage(411002680,'<b>🔉new ticket </b>from '+ctx.from.first_name+'\n<b>id:</b><code>'+ctx.from.id+'</code>\n\n\n'+ctx.message.text,Extra
+        .HTML()
+        .markup((m) => m.inlineKeyboard([
+            m.callbackButton('🔔Reply', '🔔Reply')
+
+        ], {columns: 3})))
+        .then(()=> {
+            ctx.replyWithHTML('✅ Your question has been moved to the support center and will be answered before 24 hours.', Markup
+                .keyboard([
+                    ['🔮Account'],
+                    ['➕Deposit', '🎉Shop', '🏦Withdraw'],
+                    ['👤Refferal', '🎁Bonus', '☎️Support']
+                ])
+
+                .resize()
+                .extra())
+            ctx.scene.leave()
+        })
+})
+
+///reply scene
+const ticketreplyScene = new Scene('ticketreply')
+ticketreplyScene.enter((ctx) => ctx.replyWithHTML('<b>Ticket Reply</b>',Markup
+    .keyboard([
+        ['🛑cancel'] // Row1 with 2 buttons
+    ])
+
+    .resize()
+    .extra())
+    .then(()=>{
+        ctx.replyWithHTML('enter the id provided by the ticket below to reply to the ticket')
+
+    })
+
+
+)
+ticketreplyScene.hears('🛑cancel',ctx => {
+    ctx.reply('Main menu', Markup
+        .keyboard([
+            ['🔮Account'],
+            ['➕Deposit','🎉Shop','🏦Withdraw'],
+            ['👤Refferal','🎁Bonus','☎️Support']
+        ])
+
+        .resize()
+        .extra())
+    ctx.scene.leave()
+
+
+
+})
+ticketreplyScene.on('message',ctx=>{
+    var ide = 411002680;
+    var sqli = "update `account` set `ticket` = '" + ctx.message.text + "' where `id` = '" + ide + "'";
+    con.query(sqli)
+        ctx.replyWithHTML('done')
+        .then(()=> {
+            ctx.scene.enter('reply')
+        })
+
+
+
+
+
+})
+
+
+///reply
+const replyScene = new Scene('reply')
+replyScene.enter((ctx) => ctx.replyWithHTML('<b>Ticket Reply</b>',Markup
+    .keyboard([
+        ['🛑cancel'] // Row1 with 2 buttons
+    ])
+
+    .resize()
+    .extra())
+    .then(()=>{
+        ctx.replyWithHTML('enter the reply message below')
+
+        })
+
+
+)
+replyScene.hears('🛑cancel',ctx => {
+    ctx.reply('Main menu', Markup
+        .keyboard([
+            ['🔮Account'],
+            ['➕Deposit','🎉Shop','🏦Withdraw'],
+            ['👤Refferal','🎁Bonus','☎️Support']
+        ])
+
+        .resize()
+        .extra())
+    ctx.scene.leave()
+
+
+
+})
+
+replyScene.on('message',ctx => {
+    var ide=411002680;
+    var sqla = "SELECT `ticket` from `account` where `id` = '" + ide + "'";
+    con.query(sqla,function (err,res) {
+        ctx.reply('✅Ticket sent', Markup
+            .keyboard([
+                ['🔮Account'],
+                ['➕Deposit', '🎉Shop', '🏦Withdraw'],
+                ['👤Refferal', '🎁Bonus', '☎️Support']
+            ])
+
+            .resize()
+            .extra())
+        ctx.telegram.sendMessage(res[0].ticket, '✅ You have new message from Support Team\n\n' + ctx.message.text)
+        ctx.scene.leave()
+
+    })
+
+})
+
+
+
+
+
+
+
+
+//scenes
+const stage = new Stage([greeterScene,withdrawscene,ticketScene,ticketreplyScene,replyScene], { ttl: 18000000 })
+bot.use(session())
+bot.use(stage.middleware())
+bot.action('🖋Set withdraw wallet', enter('greeter'))
+bot.hears('💵Order payment',enter('withdraw'))
+bot.hears('✏️Ticket',enter('ticket'))
+bot.action('🔔Reply', enter('ticketreply'))
+
+
 
 
 
@@ -748,6 +1159,63 @@ cron.schedule('0 0 0 * * *', () => {
     con.query('update account set `started`=`started`+1 WHERE `id`=411002680')
 
 })
+
+
+////production
+//ant 1
+cron.schedule('*/59 * * * *', () => {
+    var production=0.00000008;
+    var bal=1;
+    con.query("update `account` set `balance` =`balance`+`ant1`* '" + production + "' where `ant1` >= '" + bal + "'")
+
+})
+    //ant2
+cron.schedule('*/59 * * * *', () => {
+    var production=0.00000093;
+    var bal=1;
+    con.query("update `account` set `balance` =`balance`+`ant2`* '" + production + "' where `ant2` >= '" + bal + "'")
+
+})
+//ant 3
+cron.schedule('*/59 * * * *', () => {
+    var production=0.00000521;
+    var bal=1;
+    con.query("update `account` set `balance` =`balance`+`ant3`* '" + production + "' where `ant3` >= '" + bal + "'")
+
+})
+
+///ant4
+cron.schedule('*/59 * * * *', () => {
+    var production=0.00001125;
+    var bal=1;
+    con.query("update `account` set `balance` =`balance`+`ant4`* '" + production + "' where `ant4` >= '" + bal + "'")
+
+})
+//ant5
+cron.schedule('*/59 * * * *', () => {
+    var production=0.000067;
+    var bal=1;
+    con.query("update `account` set `balance` =`balance`+`ant5`* '" + production + "' where `ant5` >= '" + bal + "'")
+
+})
+//////ant6
+cron.schedule('*/59 * * * *', () => {
+    var production=0.000158;
+    var bal=1;
+    con.query("update `account` set `balance` =`balance`+`ant6`* '" + production + "' where `ant6` >= '" + bal + "'")
+
+})
+////ant7
+cron.schedule('*/59 * * * *', () => {
+    var production=0.0005;
+    var bal=1;
+    con.query("update `account` set `balance` =`balance`+`ant7`* '" + production + "' where `ant7` >= '" + bal + "'")
+
+})
+
+
+
+
 
 
 
